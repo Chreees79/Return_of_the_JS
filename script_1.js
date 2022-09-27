@@ -23,28 +23,34 @@ const entrepreneurs = [
 
 console.log("Array with only First names and Last names")
 function namesOfPersons(array) {
-  return array.map(x => x.first +' ' + x.last);
+  return array.map(entrepreneur => entrepreneur.first +' ' + entrepreneur.last);
 }
 console.log(namesOfPersons(entrepreneurs))
 
 //Array with year replace by age in 2022
 
 console.log('Array with age instead of year of birth')
-  var array = []
-  var currentYear =  new Date().getFullYear();
-  entrepreneurs.forEach(x =>
-  array.push({first: x.first, last: x.last, age: (currentYear - x.year)})
-  );
-console.log(array);
+
+function ageInsteadOfYear(array) {
+  let currentYear =  new Date().getFullYear();
+  let newArrayWithAge = array.map(entrepreneur => {
+    return {first: entrepreneur.first, last: entrepreneur.last, age: (currentYear - entrepreneur.year)}
+    });
+  return newArrayWithAge
+};
+console.log(ageInsteadOfYear(entrepreneurs))
 
 //Array with FirstName and LastName instead of first and last
 
 console.log('Array with complete keys')
-var array = []
-entrepreneurs.forEach(x =>
-  array.push({firstName: x.first, lastName: x.last, year: x.year})
-  );
-console.log(array);
+
+function fullNamesKeys(array) {
+  let newArray = array.map(entrepreneur => {
+    return {firstName: entrepreneur.first, lastName: entrepreneur.last, year: entrepreneur.year}
+    });
+  return newArray
+};
+console.log(fullNamesKeys(entrepreneurs))
 
 //Array with people form seventies
 
@@ -53,8 +59,3 @@ function bornIn(array) {
   return array.filter(x => x.year.toString().split('')[2] == 7)
 };
 console.log(bornIn(entrepreneurs));
-
-//Same but coded otheray
-
-const bornIn70 = array => array.filter(x => x.year.toString().split('')[2] == 7);
-console.log(bornIn70(entrepreneurs));
