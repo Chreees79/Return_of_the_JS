@@ -6203,132 +6203,145 @@ const users = [
 // Average revenue per user
 console.log('Average revenue per user')
 
-let revenue = 0
-users.forEach(user => {
-  revenue += user.revenue
-});
-let allUser = users.length
-let averageRevenue = (revenue / allUser)
-const euros = ( averageRevenue / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"});
-console.log(euros)
+function averageRevenuePerUser(array) {
+  let allUserRevenue = array.map(user => user.revenue)
+  let userRevenueTotal = allUserRevenue.reduce((user1, user2) => user1 + user2, 0)
+  return ((userRevenueTotal / array.length) / 100).toLocaleString("eu-FR", 
+  {style:"currency", currency:"EUR"});
+}
+console.log(averageRevenuePerUser(users))
 
 //percent of user with revenue > 0
 
 console.log('Percent of user making money')
-let moneyMaker = 0
-users.forEach(user => {
-  if (user.revenue > 0){
-    moneyMaker += 1
-  }
-});
-let percentUsers = (moneyMaker*100)/allUser
-console.log(Math.round(percentUsers));
+
+function percentUserMakingMoney(array) {
+  let moneyMaker = array.filter(user => user.revenue > 0).length
+  return Math.round((moneyMaker * 100) / array.length);
+}
+console.log(percentUserMakingMoney(users) + "%")
 
 //average revenue per user making money
 
 console.log('Average money made by users actually making some')
-let makersRevenue = 0
-let userMakingMoney = 0
-users.forEach(user => {
-  if (user.revenue > 0){
-    makersRevenue += user.revenue
-    userMakingMoney += 1
-  }
-});
-let averageMakersRevenue = (makersRevenue / userMakingMoney)
-const euro = ( averageMakersRevenue / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"});
-console.log(euro);
+
+function averageMoneyMakerRevenue(array) {
+  let moneyMaker = array.filter(user => user.revenue > 0)
+  let moneyMakerRevenue = moneyMaker.map(user => user.revenue)
+  let totalMoneyMakerRevenue = moneyMakerRevenue.reduce((user1, user2) => user1 + user2, 0)
+  return ((totalMoneyMakerRevenue / moneyMakerRevenue.length) / 100).toLocaleString("eu-FR", 
+  {style:"currency", currency:"EUR"});
+}
+console.log(averageMoneyMakerRevenue(users))
+
 
 //How much total of money
 
-console.log('total amount of money made')
-const eur = ( makersRevenue / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"});
-console.log(eur);
+console.log('Total amount of money made')
+
+function totalAmountMade(array) {
+  let totalMoney = array.map(user => user.revenue).reduce((user1, user2) => user1 + user2, 0)
+  return (totalMoney / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"});
+}
+console.log(totalAmountMade(users))
+
+// Fonction for finding users from specified country
+
+function findUsersFromCountry(array, country) {
+  var countryUsers = array.filter(user => user.country == country)
+  return countryUsers;
+}
+
 
 //how many user from france
 
-console.log('number of users from france')
+console.log('Number of users from france')
 
-let frenchUser = 0
-users.forEach(user => {
-  if (user.country == 'France') {
-    frenchUser += 1
-  }
-});
-console.log(frenchUser)
+function numberOfFrenchUsers() {
+  return findUsersFromCountry(users, "France").length;
+}
+console.log(numberOfFrenchUsers())
+
 
 //how many french making money
 
-let frenchUserMakingMoney = 0
-users.forEach(user => {
-  if (user.country == 'France' && user.revenue > 0) {
-    frenchUserMakingMoney += 1
-  }
-});
-console.log(frenchUserMakingMoney);
+console.log('Number of french users making money')
+
+function frenchUsersMakingMoney() {
+  let moneyMakers = findUsersFromCountry(users, "France")
+  return moneyMakers.filter(user => user.revenue > 0).length;
+}
+console.log(frenchUsersMakingMoney())
 
 //money made by 4 most represented countries (Allemagne, États-Unis, France, Grande-Bretagne)
-console.log('Money made by french')
-let frenchMakingMoney = 0
-users.forEach(user => {
-  if (user.country == 'France' && user.revenue > 0) {
-    frenchMakingMoney += user.revenue
-  }
-});
-console.log(( frenchMakingMoney / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"}));
 
-console.log('Money made by German')
-let germanMakingMoney = 0
-users.forEach(user => {
-  if (user.country == 'Germany' && user.revenue > 0) {
-    germanMakingMoney += user.revenue
-  }
-});
-console.log(( germanMakingMoney / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"}));
+console.log("Money made by the 4 most represented countries")
 
-console.log('Money made by US peoples')
-let usaMakingMoney = 0
-users.forEach(user => {
-  if (user.country == 'United States' && user.revenue > 0) {
-    usaMakingMoney += user.revenue
-  }
-});
-console.log(( usaMakingMoney / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"}));
-
-console.log('Money made by british')
-let britishMakingMoney = 0
-users.forEach(user => {
-  if (user.country == 'Great Britain' && user.revenue > 0) {
-    britishMakingMoney += user.revenue
-  }
-});
-console.log(( britishMakingMoney / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"}));
-
-// list of countries where money was made
-
-let moneyMakerCountries = []
-users.forEach(user =>{
-    if (moneyMakerCountries.includes(user.country) == false && user.revenue > 0){
-        moneyMakerCountries.push(user.country)
-    }
-})
-
-console.log(moneyMakerCountries)
-
-function fiver(){
-  let usersCopy = users
-  function compare(a, b) {
-      const userA = a.revenue;
-      const userB = b.revenue;
-
-      let comparison = 0;
-      if (userA > userB) {
-          comparison = 1;
-      } else if (userA < userB) {
-          comparison = -1;
-      }
-      return comparison * -1; 
-  }
-  return  usersCopy.sort(compare).slice(0, 5);
+function moneyMadeBy(users, country) {
+  let moneyMakers = findUsersFromCountry(users, country)
+  let totalAmountMade = moneyMakers.map(user => user.revenue).reduce((user1, user2) => user1 + user2, 0)
+  return (totalAmountMade / 100).toLocaleString("eu-FR", {style:"currency", currency:"EUR"});
 }
-console.log(fiver());
+
+console.log("Money made by British", moneyMadeBy(users, "Great Britain"))
+console.log("Money made by German", moneyMadeBy(users, "Germany"))
+console.log("Money made by American", moneyMadeBy(users, "United States"))
+console.log("Money made by French", moneyMadeBy(users, "France"))
+
+// List of countries making money
+
+console.log("List of countries making money")
+
+function countriesThatMadeMoney(array) {
+  let usersWhoMadeMoney = array.filter(user => user.revenue > 0)
+  let countriesOfUsers = usersWhoMadeMoney.map(user => user.country)
+  uniq = [...new Set(countriesOfUsers)]
+  return uniq;
+  //return countriesOfUsers.filter((value, index) => countriesOfUsers.indexOf(value) === index).sort() <--- longer but clearer but older way
+}
+console.log(countriesThatMadeMoney(users))
+
+// 5 most efficient users
+
+console.log("5 users that made the most")
+
+function mostBankableUsers(array) {
+  let userMakingMoney = array.filter(user => user.revenue > 0)
+  userMakingMoney = userMakingMoney.sort((userOne, userTwo) => (userOne.revenue < userTwo.revenue ? 1 : -1)).slice(0, 5);
+  return userMakingMoney
+}
+
+console.log(mostBankableUsers(users))
+
+//Gender that made the most
+
+console.log("Gender making the most")
+
+function genderThatMadeMostMoney(array) {
+  let femaleUsers = array.filter(user => user.sex === "F")
+  let maleUsers = array.filter(user => user.sex === "M")
+  let totalFemaleMoney = femaleUsers.map(user => user.revenue).reduce((user1, user2) => user1 + user2, 0)
+  let totalMaleMoney = maleUsers.map(user => user.revenue).reduce((user1, user2) => user1 + user2, 0)
+  return totalFemaleMoney > totalMaleMoney ? "Wemen made the most" : "Men made the most";
+}
+
+console.log(genderThatMadeMostMoney(users))
+
+//Users taht made at least 75€
+
+console.log("Users that made at least 75€")
+
+function usersMadeAtLeast(array) {
+  return usersMakingMoney = array.filter(user => user.revenue >= 7500);
+}
+
+console.log(usersMadeAtLeast(users))
+
+//Percent of paying users in the first 100
+
+console.log("Percent of paying users from the 100 first")
+
+function percentOfHundred(array) {
+  return hundredUsers = array.slice(0, 100).filter(user => user.revenue > 0).length;
+}
+console.log(percentOfHundred(users) + "%")
